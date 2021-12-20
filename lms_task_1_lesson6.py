@@ -1,6 +1,6 @@
-s = input('write something')
-if len(s) >= 2:
-    e = s[:2] + s[-2:]
+sample_string = input('write something')
+if len(sample_string) >= 2:
+    expected_string = sample_string[:2] + sample_string[-2:]
 else:
-    e = 'Empty String'
-print(e)
+    expected_string = ''
+print(expected_string)
