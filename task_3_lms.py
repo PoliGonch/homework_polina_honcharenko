@@ -1,7 +1,6 @@
 def name_check():
-    name = str.lower('AntOn')
+    name = 'anton'
     user_name = input('Enter your name: ')
-
     return name == user_name.lower()
 
 
