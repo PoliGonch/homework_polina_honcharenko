@@ -16,7 +16,7 @@ def compare_number(generated_number: int, guessed_number: int) -> bool:
     return generated_number == guessed_number
 
 
-def massage_print():
+def message_print():
     is_equal = compare_number(generated_number=generate_number(), guessed_number=input_number())
     print(generate_number())
     if is_equal:
@@ -26,4 +26,4 @@ def massage_print():
 
 
 if __name__ == '__main__':
-    massage_print()
+    message_print()
