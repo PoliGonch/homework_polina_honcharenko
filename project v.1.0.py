@@ -77,8 +77,8 @@ def actions_with_movie(user_id):
 
 
 def get_movie_id(movie):
+    movie_id = []
     for i in list_of_media.keys():
-        movie_id = None
         movie_attributes = list_of_media[i]
         if [k for k, v in movie_attributes.items() if v == movie]:
             movie_id = i
