@@ -39,4 +39,6 @@ def create_strings_2(given_string):
 
 
 if __name__ == '__main__':
-    print(create_strings(get_string()))
+    result = create_strings(get_string())
+    for item in result:
+        print(item)
