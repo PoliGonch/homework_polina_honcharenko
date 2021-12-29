@@ -11,7 +11,8 @@ def create_strings(given_string):
     chars = list(given_string)
     for j in range(string_length):
         random.shuffle(chars)
-        new_strings_list.append(''.join(chars))
+        if chars not in new_strings_list:
+            new_strings_list.append(''.join(chars))
     return new_strings_list
 
 
@@ -38,4 +39,4 @@ def create_strings_2(given_string):
 
 
 if __name__ == '__main__':
-    print(create_strings_2(get_string()))
+    print(create_strings(get_string()))
