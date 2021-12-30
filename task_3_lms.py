@@ -2,7 +2,7 @@ import random
 
 
 def get_string():
-    return input('Give me string: ')
+    return 'Give me string: '
 
 
 def create_strings(given_string):
@@ -27,7 +27,7 @@ def create_strings_1(given_string):
 
 def create_strings_2(given_string):
     strings_list = []
-    for i in given_string:
+    for _ in given_string:
         chars = list(given_string)
         new_list = []
         while len(chars) > 0:
