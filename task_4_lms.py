@@ -1,4 +1,4 @@
-def check_answer(result: int, answer: int):
+def check_answer(result: int, answer: int) -> None:
     if result == answer:
         print('This is correct!')
     else:
