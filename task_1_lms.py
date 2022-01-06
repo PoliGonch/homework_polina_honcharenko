@@ -1,5 +1,6 @@
 import random
 
+
 def greatest_number(num_list: list) -> int:
     return max(num_list)
 
