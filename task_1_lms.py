@@ -1,4 +1,4 @@
-def dict_of_string(example_string):
+def dict_of_string(example_string: str) -> dict:
     translator = str.maketrans('', '', ',.!:;-<>=')
     new_string = example_string.translate(translator)
 
