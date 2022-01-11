@@ -1,4 +1,4 @@
-class Dog():
+class Dog:
     age_factor = 7
 
     def __init__(self, age):
