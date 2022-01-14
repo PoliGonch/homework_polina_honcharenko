@@ -8,7 +8,6 @@ class TVController:
         self.count_number = 0
         self.turned_channel = channels[self.count_number]
 
-    @property
     def first_channel(self):
         return self.channels[0]
 
@@ -46,14 +45,13 @@ class TVController:
     def current_channel(self):
         return self.turned_channel
 
-    def is_exist(self, channel):
+    def is_exist(self, channel: int | str):
         try:
             if type(channel) == int and self.channels[channel - 1]:
                 print('Yes')
 
-            if type(channel) == str:
-                x = [item for item in self.channels if item == channel]
-                if x:
+            elif type(channel) == str:
+                if channel in self.channels:
                     print('Yes')
                 else:
                     print('No')
