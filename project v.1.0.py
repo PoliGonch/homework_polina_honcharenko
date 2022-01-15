@@ -1,3 +1,31 @@
+import json
+
+from path import path_to_parent
+
+path_to_users_file = path_to_parent.joinpath('users.json')
+path_to_media_file = path_to_parent.joinpath('media.json')
+path_to_media_and_users_file = path_to_parent.joinpath('media_and_users.json')
+
+
+def load_data(path_to_file):
+    read_data = path_to_file.read_text()
+    return json.loads(read_data)
+
+
+def dump_data(path_to_file, data):
+    data_as_string = json.dumps(data, indent=2)
+    return path_to_file.write_text(data_as_string)
+
+
+def write_to_file(info, file):
+    if file == 'users':
+        dump_data(path_to_users_file, info)
+    elif file == 'media':
+        dump_data(path_to_media_file, info)
+    elif file == 'media_and_users':
+        dump_data(path_to_media_and_users_file, info)
+
+
 list_of_media: dict[str, dict[str, str | int] | dict[str, str | int] | dict[str, str | int] | dict[str, str | int]] = {
     'movie_id_1': {'title': 'Mask', 'year': '2001', 'genre': 'comedy', 'rating': 0},
     'movie_id_2': {'title': 'Titanic', 'year': '1996', 'genre': 'drama', 'rating': 0},
@@ -196,5 +224,8 @@ def main():
     actions_with_movie(user_id)
 
 
+# if __name__ == '__main__':
+#     main()
+
 if __name__ == '__main__':
-    main()
+    write_to_file(list_of_users, 'users')
