@@ -19,6 +19,3 @@ class SquaresTestCase(unittest.TestCase):
         l2 = function_example.squares(l)
         self.assertEqual(l2, [1, 4, 9, 16])
 
-
-if __name__ == '__main__':
-    unittest.main()
