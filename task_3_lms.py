@@ -41,41 +41,62 @@ class Fraction:
             raise TypeError('Wrong type')
 
     def __add__(self, other):
-        self.check_type(other)
-        new_top = self.top * other.bottom + other.top * self.bottom
-        new_bottom = self.bottom * other.bottom
-        common = nsd(new_top, new_bottom)
-        new_num = str(new_top // common) + '/' + str(new_bottom // common)
-        return Fraction(new_num)
+        try:
+            self.check_type(other)
+            new_top = self.top * other.bottom + other.top * self.bottom
+            new_bottom = self.bottom * other.bottom
+            common = nsd(new_top, new_bottom)
+            new_num = str(new_top // common) + '/' + str(new_bottom // common)
+            return Fraction(new_num)
+        except TypeError:
+            print('Wrong type')
+        except ValueError as exc:
+            print(exc)
 
     def __sub__(self, other):
-        self.check_type(other)
-        new_top = self.top * other.bottom - other.top * self.bottom
-        new_bottom = self.bottom * other.bottom
-        common = nsd(new_top, new_bottom)
-        new_num = str(new_top // common) + '/' + str(new_bottom // common)
-        return Fraction(new_num)
+        try:
+            self.check_type(other)
+            new_top = self.top * other.bottom - other.top * self.bottom
+            new_bottom = self.bottom * other.bottom
+            common = nsd(new_top, new_bottom)
+            new_num = str(new_top // common) + '/' + str(new_bottom // common)
+            return Fraction(new_num)
+        except TypeError:
+            print('Wrong type')
+        except ValueError as exc:
+            print(exc)
 
     def __mul__(self, other):
-        self.check_type(other)
-        new_top = self.top * other.top
-        new_bottom = self.bottom * other.bottom
-        common = nsd(new_top, new_bottom)
-        new_num = str(new_top // common) + '/' + str(new_bottom // common)
-        return Fraction(new_num)
+        try:
+            self.check_type(other)
+            new_top = self.top * other.top
+            new_bottom = self.bottom * other.bottom
+            common = nsd(new_top, new_bottom)
+            new_num = str(new_top // common) + '/' + str(new_bottom // common)
+            return Fraction(new_num)
+        except TypeError:
+            print('Wrong type')
+        except ValueError as exc:
+            print(exc)
 
     def __truediv__(self, other):
-        self.check_type(other)
-        new_top = self.top * other.bottom
-        new_bottom = self.bottom * other.top
-        common = nsd(new_top, new_bottom)
-        new_num = str(new_top // common) + '/' + str(new_bottom // common)
-        return Fraction(new_num)
+        try:
+            self.check_type(other)
+            new_top = self.top * other.bottom
+            new_bottom = self.bottom * other.top
+            common = nsd(new_top, new_bottom)
+            new_num = str(new_top // common) + '/' + str(new_bottom // common)
+            return Fraction(new_num)
+        except TypeError:
+            print('Wrong type')
+        except ValueError as exc:
+            print(exc)
 
 
 def main():
     x = Fraction('1/2')
     y = Fraction('1/4')
+    a = '1/3'
     print(x + y)
     print(x - y)
     print(x * y)
