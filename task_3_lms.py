@@ -112,3 +112,19 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# def find_top(self, fraction):
+#     self._temp_fraction = list(''.join(fraction))
+#     top = []
+#
+#     while self._temp_fraction:
+#         if self._temp_fraction[0] == '/':
+#             break
+#         top.append(self._temp_fraction[0])
+#         self._temp_fraction.remove(self._temp_fraction[0])
+#     return int(''.join(top))
+#
+#
+# def find_bottom(self, fraction):
+#     bottom = [char for char in fraction if char != '/']
+#     return int(''.join(bottom))
