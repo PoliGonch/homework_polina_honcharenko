@@ -2,6 +2,7 @@ def count_function():
     x = 3
     a = 1
     foo = 'foo'
+    print('Local variables: ', locals())
     print('A number of local variables:', count_function.__code__.co_nlocals)
 
 
@@ -11,4 +12,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-   
