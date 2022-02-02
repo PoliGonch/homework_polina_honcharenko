@@ -9,32 +9,40 @@ def nsd(m, n):
 
 
 class Fraction:
-    _temp_fraction = []
 
     def __init__(self, fraction):
         self.fraction = fraction
-        self.top = self.find_top(fraction)
-        self.bottom = self.find_bottom(fraction=self._temp_fraction)
-        if self.bottom == 0:
-            raise ZeroDivisionError('You can not divide by zero')
+        try:
+            self.top, self.bottom = self.find_top_and_bottom(fraction)
+            if self.bottom == 0:
+                raise ZeroDivisionError('You can not divide by zero')
+        except ValueError as exc:
+            print('Give me fraction with / division sign')
+            raise
+        except TypeError as exc:
+            print('Wrong type')
+            raise
+        except Exception as exc:
+            print(exc)
+            raise
 
     def __str__(self):
         return f'Fraction({self.top}/{self.bottom})'
 
-    def find_top(self, fraction):
-        self._temp_fraction = list(''.join(fraction))
-        top = []
-
-        while self._temp_fraction:
-            if self._temp_fraction[0] == '/':
-                break
-            top.append(self._temp_fraction[0])
-            self._temp_fraction.remove(self._temp_fraction[0])
-        return int(''.join(top))
-
-    def find_bottom(self, fraction):
-        bottom = [char for char in fraction if char != '/']
-        return int(''.join(bottom))
+    def find_top_and_bottom(self, fraction):
+        try:
+            temp_list = fraction.split('/')
+            top = int(temp_list[0])
+            bottom = int(temp_list[1])
+            if top is None and bottom is None:
+                raise ValueError('Wrong division sign')
+            return top, bottom
+        except ValueError as exc:
+            print(exc)
+            raise
+        except TypeError as exc:
+            raise
+            # sys.exit('Wrong division sign')
 
     def check_type(self, other):
         if not isinstance(other, Fraction):
@@ -96,7 +104,6 @@ class Fraction:
 def main():
     x = Fraction('1/2')
     y = Fraction('1/4')
-    a = '1/3'
     print(x + y)
     print(x - y)
     print(x * y)
