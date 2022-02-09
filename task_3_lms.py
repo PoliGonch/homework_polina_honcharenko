@@ -1,114 +1,72 @@
-class Stack:
+from typing import TypeAlias
+
+from node import Node
+
+ItemType: TypeAlias = int | str
+
+
+class UnorderedList:
+
     def __init__(self):
-        self._items = []
+        self._head = None
 
-    def is_empty(self):
-        return bool(self._items)
+    def is_empty(self) -> bool:
+        return self._head is None
 
-    def push(self, item):
-        self._items.append(item)
+    def size(self) -> int:
+        current = self._head
+        count = 0
+        while current is not None:
+            count += 1
+            current = current.get_next()
+        return count
 
-    def pop(self):
-        return self._items.pop()
+    def enqueue(self, item: ItemType) -> bool:
+        temp = Node(item)
+        current = self._head
 
-    def peek(self):
-        return self._items[len(self._items) - 1]
-
-    def size(self):
-        return len(self._items)
-
-    def __repr__(self):
-        representation = "<Stack>\n"
-        for ind, item in enumerate(reversed(self._items), 1):
-            representation += f"{ind}: {str(item)}\n"
-        return representation
-
-    def __str__(self):
-        return self.__repr__()
-
-    def get_from_stack(self, e):
-        try:
-            new_element = ''
-            temp_list = []
-            for _ in range(len(self._items)):
-                stack_element = self._items.pop()
-                print(stack_element)
-                if stack_element == e:
-                    new_element = stack_element
-                    continue
-                temp_list.append(stack_element)
-            print(temp_list)
-            for _ in range(len(temp_list)):
-                self.push(temp_list.pop())
-            if new_element:
-                return new_element
-            raise ValueError('Element not found')
-        except ValueError:
-            raise
-
-
-class Queue:
-    def __init__(self):
-        self._items = []
-
-    def is_empty(self):
-        return bool(self._items)
-
-    def enqueue(self, item):
-        self._items.insert(0, item)
+        temp.set_next(self._head)
+        self._head = temp
+        return True
 
     def dequeue(self):
-        return self._items.pop()
+        previous = None
+        current = self._head
 
-    def size(self):
-        return len(self._items)
+        if self._head is None:
+            return 'No items found'
+
+        while current.get_next():
+            previous = current
+            current = current.get_next()
+        if previous is None:
+            self._head = None
+        else:
+            previous.set_next(None)
+        return True
 
     def __repr__(self):
-        representation = "<Queue>\n"
-        for ind, item in enumerate(reversed(self._items), 1):
-            representation += f"{ind}: {str(item)}\n"
-        return representation
+        representation = "<UnorderedList: "
+        current = self._head
+        while current is not None:
+            representation += f"{current.get_data()} "
+            current = current.get_next()
+        return representation + ">"
 
     def __str__(self):
         return self.__repr__()
-
-    def get_from_stack(self, e):
-        try:
-            new_element = ''
-            iter_len = len(self._items)
-            for _ in range(iter_len):
-                element = self._items.pop()
-                if element == e:
-                    new_element = element
-                    iter_len += 1
-                    continue
-                self.enqueue(element)
-            if new_element:
-                return new_element
-            raise ValueError('Element not found')
-        except ValueError:
-            raise
 
 
 if __name__ == "__main__":
-    # q = Queue()
-    # q.enqueue(4)
-    # q.enqueue('dog')
-    # q.enqueue(True)
-    # q.enqueue(5)
-    # q.enqueue('Wow')
-    # q.enqueue('Star')
-    # print(q.size())
-    # print(q)
-    # print(q.get_from_stack('Wow'))
-    # print(q)
+    q = UnorderedList()
+    q.enqueue(4)
+    q.enqueue('dog')
+    q.enqueue(True)
+    q.enqueue('Hi!')
 
-    s = Stack()
-    s.push(1)
-    s.push(2)
-    s.push(3)
-    s.push(4)
-    s.push(5)
-    print(s)
-    print(s.get_from_stack(3))
-    print(s)
+    print(q.size())
+    print(q)
+    q.dequeue()
+    q.dequeue()
+    q.dequeue()
+    print(q)
