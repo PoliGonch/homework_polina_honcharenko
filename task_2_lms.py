@@ -1,61 +1,77 @@
-import pytest
+from typing import TypeAlias
+
+from node import Node
+
+ItemType: TypeAlias = int
 
 
-class Stack:
+class UnorderedList:
+
     def __init__(self):
-        self._items = []
+        self._head = None
 
-    def is_empty(self):
-        return bool(self._items)
+    def is_empty(self) -> bool:
+        return self._head is None
 
-    def push(self, item):
-        self._items.append(item)
+    def size(self) -> int:
+        current = self._head
+        count = 0
+        while current is not None:
+            count += 1
+            current = current.get_next()
+        return count
 
-    def pop(self):
-        return self._items.pop()
+    def push(self, item: ItemType) -> bool:
+        temp = Node(item)
+        previous = None
 
-    def peek(self):
-        return self._items[len(self._items) - 1]
+        if self._head is None:
+            self._head = temp
 
-    def size(self):
-        return len(self._items)
+        current = self._head
+        while current is not None:
+            previous = current
+            current = current.get_next()
+        previous.set_next(temp)
+        temp.set_next(current)
+        return True
+
+    def pop(self) -> bool | str:
+        previous = None
+        current = self._head
+
+        if self._head is None:
+            return 'No items found'
+
+        while current.get_next():
+            previous = current
+            current = current.get_next()
+        if previous is None:
+            self._head = None
+        else:
+            previous.set_next(None)
+        return True
 
     def __repr__(self):
-        representation = "<Stack>\n"
-        for ind, item in enumerate(reversed(self._items), 1):
-            representation += f"{ind}: {str(item)}\n"
-        return representation
+        representation = "<UnorderedList: "
+        current = self._head
+        while current is not None:
+            representation += f"{current.get_data()} "
+            current = current.get_next()
+        return representation + ">"
 
     def __str__(self):
         return self.__repr__()
 
 
-def get_is_bracket_balanced(sentence_to_check: str):
-    stack = Stack()
-    temp_dict = {
-        '(': ')',
-        '{': '}',
-        '[': ']',
-    }
+if __name__ == "__main__":
+    my_list = UnorderedList()
 
-    for item in sentence_to_check:
-        if item in temp_dict:
-            stack.push(item)
-        elif item in temp_dict.values():
-            check_var = stack.pop()
-            if item == temp_dict[check_var]:
-                continue
-            return False
-    return True
-
-
-@pytest.mark.parametrize(
-    ['input_value', 'expectation', ],
-    [
-        ('((hello))', True,),
-        ('({[hello]})', True,),
-        ('({[hello}])', False,),
-    ],
-)
-def test_balance_checker(input_value, expectation):
-    assert get_is_bracket_balanced(input_value) == expectation
+    my_list.push(1)
+    my_list.push(2)
+    my_list.push(3)
+    my_list.push(4)
+    my_list.push(5)
+    print(my_list)
+    my_list.pop()
+    print(my_list)
