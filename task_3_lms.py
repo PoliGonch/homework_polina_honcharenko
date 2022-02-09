@@ -28,20 +28,20 @@ class Stack:
 
     def get_from_stack(self, e):
         try:
-            new_element = ''
+            new_element = []
             temp_list = []
             for _ in range(len(self._items)):
                 stack_element = self._items.pop()
-                print(stack_element)
+                # print(stack_element)
                 if stack_element == e:
-                    new_element = stack_element
+                    new_element.append(stack_element)
                     continue
                 temp_list.append(stack_element)
-            print(temp_list)
+            # print(temp_list)
             for _ in range(len(temp_list)):
                 self.push(temp_list.pop())
-            if new_element:
-                return new_element
+            if len(new_element) > 0:
+                return new_element[0]
             raise ValueError('Element not found')
         except ValueError:
             raise
@@ -74,17 +74,17 @@ class Queue:
 
     def get_from_stack(self, e):
         try:
-            new_element = ''
+            new_element = []
             iter_len = len(self._items)
             for _ in range(iter_len):
                 element = self._items.pop()
                 if element == e:
-                    new_element = element
+                    new_element.append(element)
                     iter_len += 1
                     continue
                 self.enqueue(element)
-            if new_element:
-                return new_element
+            if len(new_element) > 0:
+                return new_element[0]
             raise ValueError('Element not found')
         except ValueError:
             raise
@@ -101,6 +101,7 @@ if __name__ == "__main__":
     # print(q.size())
     # print(q)
     # print(q.get_from_stack('Wow'))
+    # print(q.get_from_stack('Haha'))
     # print(q)
 
     s = Stack()
@@ -111,4 +112,5 @@ if __name__ == "__main__":
     s.push(5)
     print(s)
     print(s.get_from_stack(3))
+    print(s.get_from_stack('haha'))
     print(s)
