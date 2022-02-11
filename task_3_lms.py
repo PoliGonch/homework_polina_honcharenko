@@ -1,72 +1,106 @@
-from typing import TypeAlias
-
-from node import Node
-
-ItemType: TypeAlias = int | str
-
-
-class UnorderedList:
-
+class HashTable:
     def __init__(self):
-        self._head = None
+        self.size = 11
+        self.slots = [None] * self.size
+        self.data = [None] * self.size
 
-    def is_empty(self) -> bool:
-        return self._head is None
+    def put(self, key, data):
+        hash_value = self.hash_function(key, len(self.slots))
 
-    def size(self) -> int:
-        current = self._head
-        count = 0
-        while current is not None:
-            count += 1
-            current = current.get_next()
-        return count
-
-    def enqueue(self, item: ItemType) -> bool:
-        temp = Node(item)
-        current = self._head
-
-        temp.set_next(self._head)
-        self._head = temp
-        return True
-
-    def dequeue(self):
-        previous = None
-        current = self._head
-
-        if self._head is None:
-            return 'No items found'
-
-        while current.get_next():
-            previous = current
-            current = current.get_next()
-        if previous is None:
-            self._head = None
+        if self.slots[hash_value] is None:
+            self.slots[hash_value] = key
+            self.data[hash_value] = data
         else:
-            previous.set_next(None)
-        return True
+            if self.slots[hash_value] == key:
+                self.data[hash_value] = data
+            else:
+                next_slot = self.re_hash(hash_value, len(self.slots))
+                while self.slots[next_slot] is not None and self.slots[next_slot] != key:
+                    next_slot = self.re_hash(next_slot, len(self.slots))
 
-    def __repr__(self):
-        representation = "<UnorderedList: "
-        current = self._head
-        while current is not None:
-            representation += f"{current.get_data()} "
-            current = current.get_next()
-        return representation + ">"
+                if self.slots[next_slot] is None:
+                    self.slots[next_slot] = key
+                    self.data[next_slot] = data
+                else:
+                    self.data[next_slot] = data
 
-    def __str__(self):
-        return self.__repr__()
+    @staticmethod
+    def hash_function(key, size):
+        return key % size
+
+    @staticmethod
+    def re_hash(old_hash, size):
+        return (old_hash + 1) % size
+
+    def get(self, key):
+        start_slot = self.hash_function(key, len(self.slots))
+
+        data = None
+        stop = False
+        found = False
+        position = start_slot
+        while self.slots[position] is not None and not found and not stop:
+            if self.slots[position] == key:
+                found = True
+                data = self.data[position]
+            else:
+                position = self.re_hash(position, len(self.slots))
+                if position == start_slot:
+                    stop = True
+
+        return data
+
+    def get_len(self):
+        return sum(i is not None for i in self.slots)
+
+    def is_exist(self, key):
+        start_slot = self.hash_function(key, len(self.slots))
+        position = start_slot
+        found = False
+        stop = False
+
+        while self.slots[position] is not None and not found and not stop:
+            if self.slots[position] == key:
+                found = True
+            else:
+                position = self.re_hash(position, len(self.slots))
+                if position == start_slot:
+                    stop = True
+        return found
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, data):
+        self.put(key, data)
+
+    def __len__(self):
+        return self.get_len()
+
+    def __contains__(self, key):
+        return self.is_exist(key)
 
 
 if __name__ == "__main__":
-    q = UnorderedList()
-    q.enqueue(4)
-    q.enqueue('dog')
-    q.enqueue(True)
-    q.enqueue('Hi!')
-
-    print(q.size())
-    print(q)
-    q.dequeue()
-    q.dequeue()
-    q.dequeue()
-    print(q)
+    H = HashTable()
+    H[54] = "cat"
+    H[26] = "dog"
+    H[93] = "lion"
+    H[17] = "tiger"
+    H[77] = "bird"
+    H[31] = "cow"
+    H[44] = "goat"
+    H[55] = "pig"
+    H[20] = "chicken"
+    print(H.slots)
+    # print(H.data)
+    #
+    # print(H[20])
+    #
+    # print(H[17])
+    # H[20] = "duck"
+    # print(H[20])
+    # print(H[99])
+    # print(H.get(55))
+    print(len(H))
+    print(200 in H)
