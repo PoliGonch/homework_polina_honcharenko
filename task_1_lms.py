@@ -1,16 +1,31 @@
-def binary_search_recursive(input_list, search_value, first=0, last=None):
-    if last is None:
-        last = len(input_list) - 1
-    if first > last:
-        raise ValueError
+def bubble_sort_2_ways(list_to_sort: list[int]) -> list[int]:
+    swapped = True
+    start_index = 0
+    end_index = len(list_to_sort) - 1
 
-    mid = (first + last) // 2
-    if input_list[mid] == search_value:
-        return mid
+    while swapped:
+        swapped = False
 
-    elif input_list[mid] > search_value:
-        return binary_search_recursive(input_list, last=mid - 1, search_value=search_value)
-    return binary_search_recursive(input_list, first=mid + 1, last=len(input_list) - 1, search_value=search_value)
+        for i in range(start_index, end_index):
+            if list_to_sort[i] > list_to_sort[i + 1]:
+                list_to_sort[i], list_to_sort[i + 1] = list_to_sort[i + 1], list_to_sort[i]
+                swapped = True
+
+        if not swapped:
+            break
+
+        swapped = False
+        end_index -= 1
+
+        for i in range(end_index - 1, start_index - 1, -1):
+            if list_to_sort[i] > list_to_sort[i + 1]:
+                list_to_sort[i], list_to_sort[i + 1] = list_to_sort[i + 1], list_to_sort[i]
+                swapped = True
+
+        start_index += 1
+
+    return list_to_sort
 
 
-print(binary_search_recursive([10, 20, 30, 40, 50, 60], 20))
+input_list = [1, 2, 5, 8, 4, 5, 0, 3, 2]
+print(bubble_sort_2_ways(input_list))
