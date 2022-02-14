@@ -26,6 +26,8 @@ def merge(left_list, right_list):
 
 
 def merge_sort(nums):
+    if len(nums) <= 1:
+        return nums
     new_list = [[nums[i]] for i in range(len(nums))]
     new_num = merge(new_list[0], new_list[1])
 
