@@ -1,72 +1,114 @@
-from typing import TypeAlias
+import operator
+from typing import Generic, TypeVar, List
 
-from node import Node
+from oop_tree import BinaryTree
 
-ItemType: TypeAlias = int | str
+T = TypeVar("T")
 
 
-class UnorderedList:
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self._container: List[T] = []
 
-    def __init__(self):
-        self._head = None
+    @property
+    def empty(self) -> bool:
+        return not self._container  # not is true for empty container
 
-    def is_empty(self) -> bool:
-        return self._head is None
+    def push(self, item: T) -> None:
+        self._container.append(item)
 
-    def size(self) -> int:
-        current = self._head
-        count = 0
-        while current is not None:
-            count += 1
-            current = current.get_next()
-        return count
+    def pop(self) -> T:
+        return self._container.pop()  # LIFO
 
-    def enqueue(self, item: ItemType) -> bool:
-        temp = Node(item)
-        current = self._head
+    def __repr__(self) -> str:
+        return repr(self._container)
 
-        temp.set_next(self._head)
-        self._head = temp
-        return True
 
-    def dequeue(self):
-        previous = None
-        current = self._head
-
-        if self._head is None:
-            return 'No items found'
-
-        while current.get_next():
-            previous = current
-            current = current.get_next()
-        if previous is None:
-            self._head = None
+def parse_exp_to_tokens(math_exp: str) -> list:
+    tokens_list = []
+    number = ''
+    for sign in math_exp:
+        if sign.isspace():
+            continue
+        if sign in ['(', '+', '-', '*', '/', ')']:
+            if number != '':
+                tokens_list.append(number)
+                number = ''
+            tokens_list.append(sign)
+        elif number != '':
+            number += sign
         else:
-            previous.set_next(None)
-        return True
+            number = sign
+    return tokens_list
 
-    def __repr__(self):
-        representation = "<UnorderedList: "
-        current = self._head
-        while current is not None:
-            representation += f"{current.get_data()} "
-            current = current.get_next()
-        return representation + ">"
 
-    def __str__(self):
-        return self.__repr__()
+def build_parse_tree(math_exp: str) -> BinaryTree:
+    tokens_list = parse_exp_to_tokens(math_exp)
+    stack = Stack()
+    tree: BinaryTree = BinaryTree('')
+    stack.push(tree)
+    current_tree = tree
+
+    for i in tokens_list:
+        if i == '(':
+            current_tree.insert_left('')
+            stack.push(current_tree)
+            current_tree = current_tree.get_left_child()
+
+        elif i in ['+', '-', '*', '/']:
+            current_tree.set_root_val(i)
+            current_tree.insert_right('')
+            stack.push(current_tree)
+            current_tree = current_tree.get_right_child()
+
+        elif i == ')':
+            current_tree = stack.pop()
+
+        elif i not in ['+', '-', '*', '/', ')']:
+            try:
+                current_tree.set_root_val(int(i))
+                parent = stack.pop()
+                current_tree = parent
+
+            except ValueError:
+                raise ValueError("token '{}' is not a valid integer".format(i))
+
+    return tree
+
+
+def evaluate(parse_tree):
+    operates = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.truediv}
+
+    left_c = parse_tree.get_left_child()
+    right_c = parse_tree.get_right_child()
+
+    if left_c and right_c:
+        fn = operates[parse_tree.get_root_val()]
+        return fn(evaluate(left_c), evaluate(right_c))
+    else:
+        return parse_tree.get_root_val()
+
+
+def print_exp(tree: BinaryTree) -> str:
+    s_val = ""
+    if tree:
+        if tree.get_left_child() is None and tree.get_right_child() is None:
+            s_val = str(tree.get_root_val())
+        else:
+            s_val = '(' + print_exp(tree.get_left_child())
+            s_val += str(tree.get_root_val())
+            s_val = s_val + print_exp(tree.get_right_child()) + ')'
+    return s_val
 
 
 if __name__ == "__main__":
-    q = UnorderedList()
-    q.enqueue(4)
-    q.enqueue('dog')
-    q.enqueue(True)
-    q.enqueue('Hi!')
-
-    print(q.size())
-    print(q)
-    q.dequeue()
-    q.dequeue()
-    q.dequeue()
-    print(q)
+    pt: BinaryTree = build_parse_tree("((10+5) * (3+4) )")
+    print(evaluate(pt))
+    # print()
+    # pt.pre_order()
+    # print()
+    # pt.post_order()
+    # print()
+    # pt.in_order()
+    # print("__")
+    print(print_exp(pt))
