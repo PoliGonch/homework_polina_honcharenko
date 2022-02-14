@@ -1,72 +1,63 @@
-from typing import TypeAlias
+def insertion_sort(nums):
+    # Start on the second element as we assume the first element is sorted
+    for i in range(1, len(nums)):
+        item_to_insert = nums[i]
+        # And keep a reference of the index of the previous element
+        j = i - 1
+        # Move all items of the sorted segment forward if they are larger than
+        # the item to insert
+        while j >= 0 and nums[j] > item_to_insert:
+            nums[j + 1] = nums[j]
+            j -= 1
+        # Insert the item
+        nums[j + 1] = item_to_insert
 
-from node import Node
 
-ItemType: TypeAlias = int | str
+def quick_sort(array):
+    if len(array) < 10:
+        insertion_sort(array)
+
+    else:
+        quick_sort_helper(array, 0, len(array) - 1)
 
 
-class UnorderedList:
+def quick_sort_helper(array, first, last):
+    if first < last:
+        split_point = partition(array, first, last)
 
-    def __init__(self):
-        self._head = None
+        quick_sort_helper(array, first, split_point - 1)
+        quick_sort_helper(array, split_point + 1, last)
 
-    def is_empty(self) -> bool:
-        return self._head is None
 
-    def size(self) -> int:
-        current = self._head
-        count = 0
-        while current is not None:
-            count += 1
-            current = current.get_next()
-        return count
+def partition(array, first, last):
+    pivot_value = array[first]
 
-    def enqueue(self, item: ItemType) -> bool:
-        temp = Node(item)
-        current = self._head
+    left_mark = first + 1
+    right_mark = last
 
-        temp.set_next(self._head)
-        self._head = temp
-        return True
+    done = False
+    while not done:
 
-    def dequeue(self):
-        previous = None
-        current = self._head
+        while left_mark <= right_mark and array[left_mark] <= pivot_value:
+            left_mark = left_mark + 1
 
-        if self._head is None:
-            return 'No items found'
+        while array[right_mark] >= pivot_value and right_mark >= left_mark:
+            right_mark = right_mark - 1
 
-        while current.get_next():
-            previous = current
-            current = current.get_next()
-        if previous is None:
-            self._head = None
+        if right_mark < left_mark:
+            done = True
         else:
-            previous.set_next(None)
-        return True
+            temp = array[left_mark]
+            array[left_mark] = array[right_mark]
+            array[right_mark] = temp
 
-    def __repr__(self):
-        representation = "<UnorderedList: "
-        current = self._head
-        while current is not None:
-            representation += f"{current.get_data()} "
-            current = current.get_next()
-        return representation + ">"
-
-    def __str__(self):
-        return self.__repr__()
+    temp = array[first]
+    array[first] = array[right_mark]
+    array[right_mark] = temp
+    print(array)
+    return right_mark
 
 
-if __name__ == "__main__":
-    q = UnorderedList()
-    q.enqueue(4)
-    q.enqueue('dog')
-    q.enqueue(True)
-    q.enqueue('Hi!')
-
-    print(q.size())
-    print(q)
-    q.dequeue()
-    q.dequeue()
-    q.dequeue()
-    print(q)
+random_list_of_nums = [22, 3, 45, 68, 79, 83, 2]
+quick_sort(random_list_of_nums)
+print(random_list_of_nums)
