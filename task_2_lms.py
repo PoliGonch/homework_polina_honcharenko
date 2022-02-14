@@ -1,32 +1,41 @@
-def fibonacci_search(lys, val):
-    fib_minus_2 = 0
-    fib_minus_1 = 1
-    fib = fib_minus_1 + fib_minus_2
+def merge(left_list, right_list):
+    sorted_list = []
+    left_list_index = right_list_index = 0
 
-    while fib < len(lys):
-        fib_minus_2 = fib_minus_1
-        fib_minus_1 = fib
-        fib = fib_minus_1 + fib_minus_2
-    index = -1
+    left_list_length, right_list_length = len(left_list), len(right_list)
 
-    while fib > 1:
-        i = min(index + fib_minus_2, (len(lys) - 1))
+    for _ in range(left_list_length + right_list_length):
+        if left_list_index < left_list_length and right_list_index < right_list_length:
+            if left_list[left_list_index] <= right_list[right_list_index]:
+                sorted_list.append(left_list[left_list_index])
+                left_list_index += 1
 
-        if lys[i] < val:
-            fib = fib_minus_1
-            fib_minus_1 = fib_minus_2
-            fib_minus_2 = fib - fib_minus_1
-            index = i
-        elif lys[i] > val:
-            fib = fib_minus_2
-            fib_minus_1 = fib_minus_1 - fib_minus_2
-            fib_minus_2 = fib - fib_minus_1
-        else:
-            return i
+            else:
+                sorted_list.append(right_list[right_list_index])
+                right_list_index += 1
 
-    if fib_minus_1 and index < (len(lys) - 1) and lys[index + 1] == val:
-        return index + 1
-    return -1
+        elif left_list_index == left_list_length:
+            sorted_list.append(right_list[right_list_index])
+            right_list_index += 1
+
+        elif right_list_index == right_list_length:
+            sorted_list.append(left_list[left_list_index])
+            left_list_index += 1
+
+    return sorted_list
 
 
-print(fibonacci_search([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 8))
+def merge_sort(nums):
+    new_list = [[nums[i]] for i in range(len(nums))]
+    new_num = merge(new_list[0], new_list[1])
+
+    for i in range(2, len(nums)):
+        new_num = merge(new_num, new_list[i])
+
+    return new_num
+
+
+random_list_of_nums = [5, 120, 45, 68, 250, 176, 1, 0, 17, 984]
+# print(random_list_of_nums)
+random_list_of_nums = merge_sort(random_list_of_nums)
+print(random_list_of_nums)
