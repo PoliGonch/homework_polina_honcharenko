@@ -1,111 +1,96 @@
-import operator
-from typing import Generic, TypeVar, List
+# Homework:
+# Task 1
+# Implement a binary heap as a max heap.
 
-from oop_tree import BinaryTree
+class Heap:
+    def __init__(self):
+        self.__heap = []
+        self.__last_index = -1
 
-T = TypeVar("T")
-
-
-class Stack(Generic[T]):
-    def __init__(self) -> None:
-        self._container: List[T] = []
-
-    @property
-    def empty(self) -> bool:
-        return not self._container  # not is true for empty container
-
-    def push(self, item: T) -> None:
-        self._container.append(item)
-
-    def pop(self) -> T:
-        return self._container.pop()  # LIFO
-
-    def __repr__(self) -> str:
-        return repr(self._container)
-
-
-def parse_exp_to_tokens(math_exp: str) -> list:
-    tokens_list = []
-    number = ''
-    for sign in math_exp:
-        if sign.isspace():
-            continue
-        if sign in ['(', '+', '-', '*', '/', ')']:
-            if number != '':
-                tokens_list.append(number)
-                number = ''
-            tokens_list.append(sign)
-        elif number != '':
-            number += sign
+    def push(self, value):
+        self.__last_index += 1
+        if self.__last_index < len(self.__heap):
+            self.__heap[self.__last_index] = value
         else:
-            number = sign
-    return tokens_list
+            self.__heap.append(value)
+        self.__siftup(self.__last_index)
+
+    def pop(self):
+        if self.__last_index == -1:
+            raise IndexError('pop from empty heap')
+
+        max_value = self.__heap[0]
+
+        self.__heap[0] = self.__heap[self.__last_index]
+        self.__last_index -= 1
+        self.__siftdown(0)
+
+        return max_value
+
+    def __siftup(self, index):
+        while index > 0:
+            parent_index, parent_value = self.__get_parent(index)
+
+            if parent_value >= self.__heap[index]:
+                break
+
+            self.__heap[parent_index], self.__heap[index] = \
+                self.__heap[index], self.__heap[parent_index]
+
+            index = parent_index
+
+    def __siftdown(self, index):
+        while True:
+            index_value = self.__heap[index]
+
+            left_child_index, left_child_value = self.__get_left_child(index, index_value)
+            right_child_index, right_child_value = self.__get_right_child(index, index_value)
+
+            if index_value >= left_child_value and index_value >= right_child_value:
+                break
+
+            if left_child_value > right_child_value:
+                new_index = left_child_index
+            else:
+                new_index = right_child_index
+
+            self.__heap[new_index], self.__heap[index] = \
+                self.__heap[index], self.__heap[new_index]
+
+            index = new_index
+
+    def __get_parent(self, index):
+        if index == 0:
+            return None, None
+
+        parent_index = (index - 1) // 2
+
+        return parent_index, self.__heap[parent_index]
+
+    def __get_left_child(self, index, default_value):
+        left_child_index = 2 * index + 1
+
+        if left_child_index > self.__last_index:
+            return None, default_value
+
+        return left_child_index, self.__heap[left_child_index]
+
+    def __get_right_child(self, index, default_value):
+        right_child_index = 2 * index + 2
+
+        if right_child_index > self.__last_index:
+            return None, default_value
+
+        return right_child_index, self.__heap[right_child_index]
+
+    def __len__(self):
+        return self.__last_index + 1
 
 
-def build_parse_tree(math_exp: str) -> BinaryTree:
-    tokens_list = parse_exp_to_tokens(math_exp)
-    stack = Stack()
-    tree: BinaryTree = BinaryTree('')
-    stack.push(tree)
-    current_tree = tree
-
-    for i in tokens_list:
-        if i == '(':
-            current_tree.insert_left('')
-            stack.push(current_tree)
-            current_tree = current_tree.get_left_child()
-
-        elif i in ['+', '-', '*', '/']:
-            current_tree.set_root_val(i)
-            current_tree.insert_right('')
-            stack.push(current_tree)
-            current_tree = current_tree.get_right_child()
-
-        elif i == ')':
-            current_tree = stack.pop()
-
-        elif i not in ['+', '-', '*', '/', ')']:
-            try:
-                current_tree.set_root_val(int(i))
-                parent = stack.pop()
-                current_tree = parent
-
-            except ValueError:
-                raise ValueError("token '{}' is not a valid integer".format(i))
-
-    return tree
-
-
-def evaluate(parse_tree):
-    operates = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.truediv}
-
-    left_c = parse_tree.get_left_child()
-    right_c = parse_tree.get_right_child()
-
-    if left_c and right_c:
-        fn = operates[parse_tree.get_root_val()]
-        return fn(evaluate(left_c), evaluate(right_c))
-    else:
-        return parse_tree.get_root_val()
-
-
-def print_exp(tree: BinaryTree) -> str:
-    s_val = ""
-    if tree:
-        s_val = '(' + print_exp(tree.get_left_child())
-        s_val += str(tree.get_root_val())
-        s_val = s_val + print_exp(tree.get_right_child()) + ')'
-    return s_val
-
-
-if __name__ == "__main__":
-    pt: BinaryTree = build_parse_tree("((10+5) * 3 )")
-    print(evaluate(pt))
-    # print()
-    # pt.pre_order()
-    # print()
-    # pt.post_order()
-    # print()
-    # pt.in_order()
-    # print("__")
-    # print(print_exp(pt))
+values = [1, 25, 15, 64, 3, 8]
+h = Heap()
+for v in values:
+    h.push(v)
+while len(h) > 0:
+    print(h.pop(), end=' ')
+print()
