@@ -87,10 +87,15 @@ class Heap:
         return self.__last_index + 1
 
 
-values = [1, 25, 15, 64, 3, 8]
-h = Heap()
-for v in values:
-    h.push(v)
-while len(h) > 0:
-    print(h.pop(), end=' ')
-print()
+def main():
+    values = [1, 25, 15, 64, 3, 8]
+    h = Heap()
+    for v in values:
+        h.push(v)
+    while len(h) > 0:
+        print(h.pop(), end=' ')
+    print()
+
+
+if __name__ == '__main__':
+    main()
