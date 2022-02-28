@@ -1,8 +1,6 @@
 # Task 2
 # Using the BinaryHeap class, implement a new class called PriorityQueue.
 # Your PriorityQueue class should implement the constructor, plus the enqueue and dequeue methods.
-import random
-
 
 class Heap:
     def __init__(self):
@@ -89,12 +87,27 @@ class Heap:
         return self.__last_index + 1
 
 
-values = random.sample(range(10000), 10)
-print(values)
+class PriorityQueue:
 
-h = Heap()
-for v in values:
-    h.push(v)
+    def __init__(self):
+        self.new_heap = Heap()
 
-while len(h) > 0:
-    print(h.pop(), end=' ')
+    def enqueue(self, item):
+        self.new_heap.push(item)
+
+    def dequeue(self):
+        return self.new_heap.pop()
+
+
+def main():
+    values = [1, 25, 15, 64, 3, 8]
+    h = PriorityQueue()
+    for v in values:
+        h.enqueue(v)
+    while len(h.new_heap) > 0:
+        print(h.dequeue(), end=' ')
+    print()
+
+
+if __name__ == '__main__':
+    main()
