@@ -29,7 +29,7 @@ class Book:
         return f'{self.name, self.year, self.author.name}'
 
     def __str__(self):
-        return f'Name: {self.name}, year: {self.year}, author: {self.author.name}'
+        return f'Name: {self.name:28} | year: {self.year:4} | author: {self.author.name}.'
 
     # def __str__(self):
     #     for index, item in enumerate(self.name)
