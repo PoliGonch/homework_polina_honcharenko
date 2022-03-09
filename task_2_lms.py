@@ -47,7 +47,9 @@ class Library:
         return self.__str__()
 
     def __str__(self):
-        return str(self.books)
+        return ''.join(
+            f'{index}. {item}\n' for index, item in enumerate(self.books, 1)
+        )
 
     def check_type(self, name, year, author):
         if isinstance(name, str) and isinstance(year, int) and isinstance(author, Author):
