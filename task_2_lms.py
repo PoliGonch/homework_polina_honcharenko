@@ -16,12 +16,6 @@ class Author:
         if not isinstance(name, str) or not isinstance(year, int):
             raise TypeError('Wrong data type')
 
-    def write_new_book(self, name: str, year: int):
-        self.check_type(name=name, year=year)
-        new_book = Book(name=name, year=year, author=self)
-        self.books.append(new_book)
-        return new_book
-
 
 class Book:
     book_amount = 0
@@ -37,6 +31,10 @@ class Book:
     def __str__(self):
         return f'Name: {self.name}, year: {self.year}, author: {self.author.name}'
 
+    # def __str__(self):
+    #     for index, item in enumerate(self.name)
+    #     return f'Name: {self.name}, year: {self.year}, author: {self.author.name}'
+
 
 class Library:
 
@@ -46,7 +44,10 @@ class Library:
         self.authors = []
 
     def __repr__(self):
-        return self.books
+        return self.__str__()
+
+    def __str__(self):
+        return str(self.books)
 
     def check_type(self, name, year, author):
         if isinstance(name, str) and isinstance(year, int) and isinstance(author, Author):
@@ -58,6 +59,7 @@ class Library:
         self.check_type(name=name, year=year, author=author)
         new_book = Book(name=name, year=year, author=author)
         Book.book_amount += 1
+        author.books.append(new_book)
         self.books.append(new_book)
         self.authors.append(author)
         return new_book
@@ -77,7 +79,7 @@ class Library:
 
     def group_by_year(self, year: int):
         new_book = list(filter(lambda book: book.year == year, self.books))
-        if new_book == []:
+        if not new_book:
             print(f'No books found by year {year}')
         else:
             print(new_book)
@@ -86,20 +88,16 @@ class Library:
 
 def main():
     arthur = Author(name='Arthur Conan Doyle', country='England', birthday='22.05.1859')
-    arthur.write_new_book(name='A Scandal in Bohemia', year=1891)
-    arthur.write_new_book(name="A Case of Identity", year=1891)
 
     library_1 = Library('Library 1')
     library_1.new_book(name='A Scandal in Bohemia', year=1891, author=arthur)
     library_1.new_book(name="A Case of Identity", year=1891, author=arthur)
 
     agatha = Author(name='Agatha Christie', country='England', birthday='15.09.1890')
-    agatha.write_new_book(name='Murder on the Orient Express', year=1933)
-    agatha.write_new_book(name='And Then There Were None', year=1939)
 
     library_1.new_book(name='Murder on the Orient Express', year=1933, author=agatha)
     library_1.new_book(name='And Then There Were None', year=1939, author=agatha)
-    print(library_1.books)
+    print(library_1)
 
     library_1.group_by_author(author=arthur)
     library_1.group_by_author(author=agatha)
