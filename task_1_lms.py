@@ -83,9 +83,14 @@ class Authorization:
         del self._email
 
 
-b = Authorization
-d = Authorization('foo_23@example.com.ua')
-print(d.get_email)
+def main():
+    b = Authorization
+    d = Authorization('foo_23@example.com.ua')
+    print(d.get_email)
+
+
+if __name__ == '__main__':
+    main()
 
 # print(re.fullmatch(r'[\w\d]+\s\d+', 'Super 205'))
 # print(re.fullmatch(r'[a-zA-Z0-9._%+-]{1,}', 'foo_23'))
