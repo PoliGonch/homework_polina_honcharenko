@@ -5,19 +5,23 @@ import requests
 
 def get_data(base_url, params):
     r = requests.get(base_url, params=params)
-    return r.json()
+    return r.json()['data']
 
 
 def write_to_json(data):
-    with open('reddit_comments.json', 'w') as f:
-        json.dump(data["data"], f, indent=4)
+    with open('reddit_comments_2.json', 'w') as f:
+        json.dump(data, f, indent=4)
 
 
 def main():
     url = 'https://api.pushshift.io/reddit/comment/search/'
     params = {"subreddit": "TheSimsBuilding", "sort": "desc", "sort_type": "created_utc"}
     data = get_data(base_url=url, params=params)
-    write_to_json(data=data)
+
+    dict_of_comments = {comment['created_utc']: comment['body'] for comment in data}
+
+    print(dict_of_comments)
+    write_to_json(data=dict_of_comments)
 
 
 if __name__ == "__main__":
