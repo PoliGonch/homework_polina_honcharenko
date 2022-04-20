@@ -1,12 +1,11 @@
 import requests
 
-API_KEY = '492dd8e724d04bff3ef82290a4edaf5a'
+API_KEY = 'TOKEN'
 
 
 def get_api():
     r = requests.get('https://api.ipify.org/?format=json')
-    result = r.json().get('ip')
-    return result
+    return r.json().get('ip')
 
 
 def get_coordinates():
